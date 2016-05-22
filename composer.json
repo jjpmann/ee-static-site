@@ -1,0 +1,36 @@
+{   
+    "name": "jjpmann/ee-static-sites",
+    "type": "ee3-addon",
+    "description": "Static html sites using EE for content.",
+    "keywords": ["eecms", "ee3", "static sites", "aws s3"],
+    "homepage": "http://github.com/jjpmann/ee-addons",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jerry Price",
+            "email": "jjpmann@gmail.com",
+            "homepage": "http://github.com/jjpmann"
+        }
+    ],
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "/Users/jerryprice/git/ee-addons"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:jjpmann/installers.git"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "league/flysystem": "^1.0",
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "composer/installers": "dev-master",
+        "jjpmann/ee-addons": "dev-master"
+    },
+    "extra": {
+        "installer-name": "static_sites"
+    }
+}
