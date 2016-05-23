@@ -6,62 +6,37 @@ use EE\Addons\Extension\BaseExtension;
 
 class Extension extends BaseExtension
 {
+
     public $name = STATIC_SITE_NAME;
     public $version = STATIC_SITE_VER;
     public $description = STATIC_SITE_DESC;
-    public $settings_exist = 'y';
+    public $settings_exist = 'n';
     public $docs_url = '';
     public $settings = [];
 
-    protected $settings_default = [
-        'execution_time'    => 1,
-        'memory_usage'      => 20,
-        'total_queries'     => 60,
-    ];
+    protected $settings_default = [];
 
     protected $hooks = [
-        'sessions_end'      => 'sessions_end_hook',
+        'sessions_end'                  => 'hookSessionsEnd',
+        'after_channel_entry_insert'    => 'sync',
+        'after_channel_entry_update'    => 'sync',
+        'after_channel_entry_save'      => 'sync',
+        'after_channel_entry_delete'    => 'sync',
     ];
 
-    /**
-     * Settings.
-     *
-     * This function returns the settings for the extensions
-     *
-     * @return settings array
-     */
     public function settings()
     {
-        $settings['execution_time'] = $this->settings_default['execution_time'];
-        $settings['memory_usage'] = $this->settings_default['memory_usage'];
-        $settings['total_queries'] = $this->settings_default['total_queries'];
-
-        return $settings;
+        return [];
     }
 
-    /**
-     * hook.
-     */
-    public function sessions_end_hook($sess)
+    public function sync()
     {
-        $this->overloadOutput();
+
     }
 
-    /**
-     * Overload the output to run SPL.
-     */
-    public function overloadOutput()
+    public function hookSessionsEnd() 
     {
-        ee()->output = $this->getOutput();
+
     }
 
-    private function getOutput()
-    {
-        return new Output($this->getSPL());
-    }
-
-    private function getSPL()
-    {
-        return new SlowPageLogger(ee(), $this->settings);
-    }
 }
