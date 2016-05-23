@@ -6,7 +6,6 @@ use EE\Addons\Extension\BaseExtension;
 
 class Extension extends BaseExtension
 {
-
     public $name = STATIC_SITE_NAME;
     public $version = STATIC_SITE_VER;
     public $description = STATIC_SITE_DESC;
@@ -31,12 +30,9 @@ class Extension extends BaseExtension
 
     public function sync()
     {
-
     }
 
-    public function hookSessionsEnd() 
+    public function hookSessionsEnd()
     {
-
     }
-
 }
