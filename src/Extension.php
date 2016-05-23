@@ -13,55 +13,66 @@ class Extension extends BaseExtension
     public $docs_url = '';
     public $settings = [];
 
-    protected $settings_default = [
-        'execution_time'    => 1,
-        'memory_usage'      => 20,
-        'total_queries'     => 60,
-    ];
+    protected $settings_default = [];
 
     protected $hooks = [
-        'sessions_end'      => 'sessions_end_hook',
+        'sessions_end'                  => 'hookSessionsEnd',
+        'after_channel_entry_insert'    => 'hookEntryInsert',
+        'after_channel_entry_update'    => 'hookEntryUpdate',
+        'after_channel_entry_save'      => 'hookEntrySave',
+        'after_channel_entry_delete'    => 'hookEntryDelete',
     ];
 
-    /**
-     * Settings.
-     *
-     * This function returns the settings for the extensions
-     *
-     * @return settings array
-     */
-    public function settings()
-    {
-        $settings['execution_time'] = $this->settings_default['execution_time'];
-        $settings['memory_usage'] = $this->settings_default['memory_usage'];
-        $settings['total_queries'] = $this->settings_default['total_queries'];
 
-        return $settings;
+    protected function sync($what)
+    {
+        die($what);
     }
 
     /**
-     * hook.
+     * Run after entry is added
+     * @param  object $entry  Current ChannelEntry model object
+     * @param  array $values The ChannelEntry model object data as an array
+     * @return void
      */
-    public function sessions_end_hook($sess)
+    public function hookEntryInsert($entry, $values)
     {
-        $this->overloadOutput();
+        $this->sync('hookEntryInsert');
     }
 
     /**
-     * Overload the output to run SPL.
+     * Run after entry is added
+     * @param  object $entry  Current ChannelEntry model object
+     * @param  array $values The ChannelEntry model object data as an array
+     * @param  array $modified An array of all the old values that were changed
+     * @return void
      */
-    public function overloadOutput()
+    public function hookEntryUpdate($entry, $values, $modified)
     {
-        ee()->output = $this->getOutput();
+        $this->sync('hookEntryUpdate');
     }
 
-    private function getOutput()
+    /**
+     * Run after entry is added
+     * @param  object $entry  Current ChannelEntry model object
+     * @param  array $values The ChannelEntry model object data as an array
+     * @return void
+     */
+    public function hookEntrySave($entry, $values)
     {
-        return new Output($this->getSPL());
+        $this->sync('hookEntrySave');
     }
 
-    private function getSPL()
+    /**
+     * Run after entry is added
+     * @param  object $entry  Current ChannelEntry model object
+     * @param  array $values The ChannelEntry model object data as an array
+     * @return void
+     */
+    public function hookEntryDelete($entry, $values)
     {
-        return new SlowPageLogger(ee(), $this->settings);
+        $this->sync('hookEntryDelete');
     }
+
+
 }
