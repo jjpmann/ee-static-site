@@ -1,16 +1,8 @@
 <?php
 
-/**
- * StaticSites Extension
- *
- * @package static-sites
- * @author Jerry Price <jjpmann@gmail.com>
- * @link https://github.com/jjpmann/ee-static-sites
- */
-
-
-class Static_sites_ext
+class Static_sites_ext extends EE\StaticSites\Extension
 {
+
     public $version = STATIC_SITE_VER;
 
     /**
