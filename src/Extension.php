@@ -15,10 +15,10 @@ class Extension extends BaseExtension
     public $docs_url = '';
     public $settings = [];
 
-    protected  $settings_default = [
-        'static_sites_domain' => '',
-        'static_sites_list' => '',
-        'static_sites_dump_path' => ''
+    protected $settings_default = [
+        'static_sites_domain'    => '',
+        'static_sites_list'      => '',
+        'static_sites_dump_path' => '',
     ];
 
     protected $hooks = [
@@ -37,7 +37,6 @@ class Extension extends BaseExtension
 
     protected function sync($what)
     {
-
     }
 
     public function settingsForm($current)
@@ -45,57 +44,57 @@ class Extension extends BaseExtension
         $name = STATIC_SITES_SLUG;
 
         if ($current == '') {
-            $current = array();
+            $current = [];
         }
 
         $values = array_replace($this->settings_default, $this->settings, $current);
 
         $vars = [
-            'base_url' => ee('CP/URL')->make('addons/settings/' . $name . '/save'),
-            'cp_page_title' => STATIC_SITES_NAME . ' Settings',
-            'save_btn_text' => 'static_sites_save_button',
+            'base_url'              => ee('CP/URL')->make('addons/settings/'.$name.'/save'),
+            'cp_page_title'         => STATIC_SITES_NAME.' Settings',
+            'save_btn_text'         => 'static_sites_save_button',
             'save_btn_text_working' => 'static_sites_save_button_working',
-            'alerts_name' => 'link-truncator-save',
-            'sections' => []
+            'alerts_name'           => 'link-truncator-save',
+            'sections'              => [],
         ];
 
         $vars['sections'][] = [[
-            'title' => 'static_sites_domain',
-            'desc' => 'static_sites_domain_desc',
+            'title'  => 'static_sites_domain',
+            'desc'   => 'static_sites_domain_desc',
             'fields' => [
                 'static_sites_domain' => [
                     'type' => 'text',
                     // 'name' => 'static_sites_domain',
-                    'attrs' => 'id="input__domain" placeholder="http://www.example.com"',
-                    'value' => $values['static_sites_domain'],
-                    'required' => TRUE
-                ]
-            ]
-        ],[
-            'title' => 'static_sites_list',
-            'desc' => 'static_sites_list_desc',
+                    'attrs'    => 'id="input__domain" placeholder="http://www.example.com"',
+                    'value'    => $values['static_sites_domain'],
+                    'required' => true,
+                ],
+            ],
+        ], [
+            'title'  => 'static_sites_list',
+            'desc'   => 'static_sites_list_desc',
             'fields' => [
                 'static_sites_list' => [
-                    'type' => 'textarea',
-                    'attrs' => 'id="input__list" placeholder="http://www.example.com/about"',
-                    'value' => $values['static_sites_list'],
-                    'required' => TRUE
-                ]
-            ]
-        ],[
-            'title' => 'static_sites_dump_path',
-            'desc' => 'static_sites_dump_path_desc',
+                    'type'     => 'textarea',
+                    'attrs'    => 'id="input__list" placeholder="http://www.example.com/about"',
+                    'value'    => $values['static_sites_list'],
+                    'required' => true,
+                ],
+            ],
+        ], [
+            'title'  => 'static_sites_dump_path',
+            'desc'   => 'static_sites_dump_path_desc',
             'fields' => [
                 'static_sites_dump_path' => [
-                    'type' => 'text',
-                    'attrs' => 'id="input__dump_path" placeholder="site_dump/html_pages"',
-                    'value' => $values['static_sites_dump_path'],
-                    'required' => TRUE
-                ]
-            ]
+                    'type'     => 'text',
+                    'attrs'    => 'id="input__dump_path" placeholder="site_dump/html_pages"',
+                    'value'    => $values['static_sites_dump_path'],
+                    'required' => true,
+                ],
+            ],
         ]];
 
-        $view = STATIC_SITES_SLUG . ':index';
+        $view = STATIC_SITES_SLUG.':index';
 
         return ee('View')->make($view)->render($vars);
     }
@@ -106,18 +105,15 @@ class Extension extends BaseExtension
             show_error(lang('unauthorized_access'));
         }
 
-
         if (Form::validate() !== false) {
             ee()->db->where('class', STATIC_SITES_EXT);
-            ee()->db->update('extensions', array('settings' => serialize($_POST)));            
+            ee()->db->update('extensions', ['settings' => serialize($_POST)]);
         }
 
         // ee()->db->where('class', __CLASS__);
         // ee()->db->update('extensions', array('settings' => serialize($_POST)));
 
-
         $this->redirectHome();
-        
     }
 
     protected function scrape()
@@ -126,17 +122,16 @@ class Extension extends BaseExtension
         $scraper->scrape();
     }
 
-
-
     public function hookSessionsEnd($sess)
     {
-        
     }
 
     /**
-     * Run after entry is added
-     * @param  object $entry  Current ChannelEntry model object
-     * @param  array $values The ChannelEntry model object data as an array
+     * Run after entry is added.
+     *
+     * @param object $entry  Current ChannelEntry model object
+     * @param array  $values The ChannelEntry model object data as an array
+     *
      * @return void
      */
     public function hookEntryInsert($entry, $values)
@@ -145,10 +140,12 @@ class Extension extends BaseExtension
     }
 
     /**
-     * Run after entry is added
-     * @param  object $entry  Current ChannelEntry model object
-     * @param  array $values The ChannelEntry model object data as an array
-     * @param  array $modified An array of all the old values that were changed
+     * Run after entry is added.
+     *
+     * @param object $entry    Current ChannelEntry model object
+     * @param array  $values   The ChannelEntry model object data as an array
+     * @param array  $modified An array of all the old values that were changed
+     *
      * @return void
      */
     public function hookEntryUpdate($entry, $values, $modified)
@@ -157,9 +154,11 @@ class Extension extends BaseExtension
     }
 
     /**
-     * Run after entry is added
-     * @param  object $entry  Current ChannelEntry model object
-     * @param  array $values The ChannelEntry model object data as an array
+     * Run after entry is added.
+     *
+     * @param object $entry  Current ChannelEntry model object
+     * @param array  $values The ChannelEntry model object data as an array
+     *
      * @return void
      */
     public function hookEntrySave($entry, $values)
@@ -168,15 +167,15 @@ class Extension extends BaseExtension
     }
 
     /**
-     * Run after entry is added
-     * @param  object $entry  Current ChannelEntry model object
-     * @param  array $values The ChannelEntry model object data as an array
+     * Run after entry is added.
+     *
+     * @param object $entry  Current ChannelEntry model object
+     * @param array  $values The ChannelEntry model object data as an array
+     *
      * @return void
      */
     public function hookEntryDelete($entry, $values)
     {
         $this->sync('hookEntryDelete');
     }
-
-
 }

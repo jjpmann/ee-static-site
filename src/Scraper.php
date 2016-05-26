@@ -2,9 +2,9 @@
 
 namespace EE\StaticSites;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local;
 use Illuminate\Config\Repository;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 
 class Scraper
 {
@@ -24,20 +24,15 @@ class Scraper
         $this->config = $config;
 
         $this->list = collect([
-            
-        ]);
-    }   
 
+        ]);
+    }
 
     public function scrape()
     {
-        
-        $this->list->each(function($item){
+        $this->list->each(function ($item) {
              $this->writePage($item, (new Scrape($item))->run());
         });
-
-
-
     }
 
     protected function writePage($item, $body)
@@ -50,17 +45,16 @@ class Scraper
     }
 
     private function getPage($url)
-    {   
-        $page = $this->reduce_double_slashes($url . '/index.html');
+    {
+        $page = $this->reduce_double_slashes($url.'/index.html');
         $page = str_replace($this->domain, '', $page);
-        $page = './site-dump/pages'. $page;
+        $page = './site-dump/pages'.$page;
 
         return $page;
     }
 
     private function reduce_double_slashes($str)
     {
-        return preg_replace("#([^/:])/+#", "\\1/", $str);
+        return preg_replace('#([^/:])/+#', '\\1/', $str);
     }
-
 }
