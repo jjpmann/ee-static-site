@@ -7,14 +7,19 @@ use Illuminate\Config\Repository;
 
 class Extension extends BaseExtension
 {
-    public $name = STATIC_SITE_NAME;
-    public $version = STATIC_SITE_VER;
-    public $description = STATIC_SITE_DESC;
+    public $name = STATIC_SITES_NAME;
+    public $slug = STATIC_SITES_SLUG;
+    public $version = STATIC_SITES_VER;
+    public $description = STATIC_SITES_DESC;
     public $settings_exist = 'y';
     public $docs_url = '';
     public $settings = [];
 
-    protected $settings_default = [];
+    protected  $settings_default = [
+        'static_sites_domain' => '',
+        'static_sites_list' => '',
+        'static_sites_dump_path' => ''
+    ];
 
     protected $hooks = [
         'sessions_end'                  => 'hookSessionsEnd',
@@ -26,7 +31,7 @@ class Extension extends BaseExtension
 
     public function __construct($settings = [])
     {
-        $this->config = new Repository($settings);
+        //$this->config = new Repository($settings);
         parent::__construct($settings);
     }
 
@@ -35,34 +40,83 @@ class Extension extends BaseExtension
 
     }
 
-    public function settingsForm()
+    public function settingsForm($current)
     {
-        $settings = array();
+        $name = STATIC_SITES_SLUG;
 
-        // Creates a text input with a default value of "EllisLab Brand Butter"
-        $settings['path']      = array('i', '', "pages");
+        if ($current == '') {
+            $current = array();
+        }
 
-        $settings['domain']    = array('i', '', "http://mini-sites.app");
+        $values = array_replace($this->settings_default, $this->settings, $current);
 
-        // Creates a textarea with 20 rows and an empty default value
-        $settings['list']    = array('t', array('rows' => '20'), '');
+        $vars = [
+            'base_url' => ee('CP/URL')->make('addons/settings/' . $name . '/save'),
+            'cp_page_title' => STATIC_SITES_NAME . ' Settings',
+            'save_btn_text' => 'static_sites_save_button',
+            'save_btn_text_working' => 'static_sites_save_button_working',
+            'alerts_name' => 'link-truncator-save',
+            'sections' => []
+        ];
 
-        
+        $vars['sections'][] = [[
+            'title' => 'static_sites_domain',
+            'desc' => 'static_sites_domain_desc',
+            'fields' => [
+                'static_sites_domain' => [
+                    'type' => 'text',
+                    // 'name' => 'static_sites_domain',
+                    'attrs' => 'id="input__domain" placeholder="http://www.example.com"',
+                    'value' => $values['static_sites_domain'],
+                    'required' => TRUE
+                ]
+            ]
+        ],[
+            'title' => 'static_sites_list',
+            'desc' => 'static_sites_list_desc',
+            'fields' => [
+                'static_sites_list' => [
+                    'type' => 'textarea',
+                    'attrs' => 'id="input__list" placeholder="http://www.example.com/about"',
+                    'value' => $values['static_sites_list'],
+                    'required' => TRUE
+                ]
+            ]
+        ],[
+            'title' => 'static_sites_dump_path',
+            'desc' => 'static_sites_dump_path_desc',
+            'fields' => [
+                'static_sites_dump_path' => [
+                    'type' => 'text',
+                    'attrs' => 'id="input__dump_path" placeholder="site_dump/html_pages"',
+                    'value' => $values['static_sites_dump_path'],
+                    'required' => TRUE
+                ]
+            ]
+        ]];
 
-        // General pattern:
-        //
-        // $settings[variable_name] => array(type, options, default);
-        //
-        // variable_name: short name for the setting and the key for the language file variable
-        // type:          i - text input, t - textarea, r - radio buttons, c - checkboxes, s - select, ms - multiselect
-        // options:       can be string (i, t) or array (r, c, s, ms)
-        // default:       array member, array of members, string, nothing
+        $view = STATIC_SITES_SLUG . ':index';
 
-        return $settings;
+        return ee('View')->make($view)->render($vars);
     }
 
     public function settingsSave()
     {
+        if (empty($_POST)) {
+            show_error(lang('unauthorized_access'));
+        }
+
+
+        if (Form::validate() !== false) {
+            ee()->db->where('class', STATIC_SITES_EXT);
+            ee()->db->update('extensions', array('settings' => serialize($_POST)));            
+        }
+
+        // ee()->db->where('class', __CLASS__);
+        // ee()->db->update('extensions', array('settings' => serialize($_POST)));
+
+
+        $this->redirectHome();
         
     }
 

@@ -37,5 +37,15 @@
     },
     "extra": {
         "installer-name": "static_sites"
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "EE\\StaticSites\\Package::postUpdate",
+            "phpunit -c app/"
+        ],
+        "post-install-cmd": [
+            "EE\\StaticSites\\Package::postIinstall",
+            "phpunit -c app/"
+        ]
     }
 }
