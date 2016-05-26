@@ -4,19 +4,17 @@ namespace EE\StaticSites;
 
 class Package
 {
-
-    static public function postInstall()
+    public static function postInstall()
     {
         echo '------------------------------------------------------------------------------------';
         echo '  POST INSTALL';
         echo '------------------------------------------------------------------------------------';
     }
 
-    static public function postUpdate()
+    public static function postUpdate()
     {
         echo '------------------------------------------------------------------------------------';
         echo '  POST UPDATE';
         echo '------------------------------------------------------------------------------------';
     }
-
 }

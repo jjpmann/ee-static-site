@@ -2,12 +2,10 @@
 
 namespace EE\StaticSites;
 
-
 use GuzzleHttp\Client;
 
 class Scrape
 {
-
     protected $url;
 
     public function __construct($url)
@@ -15,9 +13,8 @@ class Scrape
         $this->url = $url;
 
         $this->client = new Client();
-
     }
-    
+
     public function run()
     {
         $res = $this->client->request('GET', $this->url);
@@ -28,5 +25,4 @@ class Scrape
 
         return false;
     }
-
 }
